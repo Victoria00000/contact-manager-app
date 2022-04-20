@@ -6,7 +6,7 @@ export const AddContact = () => {
   const [name, setName] = useState();
   const [number, setNumber] = useState();
   const [email, setEmail] = useState();
-  const contacts = useSelector(state => state); console.log(contacts)
+  const contacts = useSelector(state => state.contactReducer); console.log(contacts);
   const dispatch = useDispatch();
   // Validations //
   const handleSubmit = (evt) => {
@@ -14,13 +14,15 @@ export const AddContact = () => {
     if (!email || !name || !number) {
       return toast.warning("Please complete all the fields.");
     };
-    const checkContactExists = contacts.map(contact => {
-      return contact.email === email || contact.name === name || contact.number === number ?
+       //  ERROR   //
+       {/* const checkContactExists = contacts.map(contact => {
+      return contact.email === email || contact.name === name || contact.number === parseInt(number) ?
         contact : null
-    });
-    if (checkContactExists) {
+    }); console.log(checkContactExists);
+    if (checkContactExists !== null) {
       return toast.error("This contact already exists.");
-    };
+    }; */}
+    
     // NewContact+Id //
     const data = {
       id: contacts[contacts.length - 1].id + 1, //making the id
@@ -31,7 +33,7 @@ export const AddContact = () => {
     // Dispatch+Action //
     dispatch({ type: 'ADD_CONTACT', payload: data });
     toast.success('Contact added.');
-    console.log('new: ', data); console.log(contacts)
+    console.log('new: ', data); console.log(contacts);
   };
 
   return (

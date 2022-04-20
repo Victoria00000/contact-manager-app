@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export const Home = () => {
-  let contacts = useSelector(state => state);
-  
+  const contacts = useSelector(state => state.contactReducer);
+  const dispatch = useDispatch();
+
+  const deleteContact = (id) => {
+    dispatch({ type: 'DELETE_CONTACT', payload: id });
+    toast.success('Contact eliminated');
+  };
+
   return (
     <>
       <div className="container">
@@ -28,18 +35,22 @@ export const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                {contacts.map((contact, id) => (
+                {contacts.map((contact, id) =>
                   <tr key={id}>
                     <td> {id + 1} </td>
                     <td> {contact.name} </td>
                     <td> {contact.email} </td>
                     <td> {contact.number} </td>
                     <td className="text-center">
-                      <Link to={'/edit/' + contact.id} className='btn btn-small btn-primary' > Edit </Link>
-                      <button type="button" className="btn btn-small btn-danger"> Delete </button>
+                      <Link to={'/edit/' + contact.id} className='btn btn-small btn-primary' >
+                        Edit
+                      </Link>
+                      <button onClick={() => deleteContact(contact.id)} type="button" className="btn btn-small btn-danger">
+                        Delete
+                      </button>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

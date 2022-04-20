@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const EditContact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const { id } = useParams();
-  const contacts = useSelector(state => state);
-  const currentContact = contacts.find(contact => contact.id === parseInt(id));
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contactReducer);
 
+  const currentContact = contacts.find(contact => contact.id === parseInt(id));
   useEffect(() => {
     if (currentContact) {
       setName(currentContact.name);
@@ -17,6 +19,21 @@ export const EditContact = () => {
       setNumber(currentContact.number);
     }
   }, [currentContact]);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    // NewContact+Id //
+    const data = {
+      id: parseInt(id), //same id
+      name,
+      email,
+      number,
+    };
+    // Dispatch+Action //
+    dispatch({ type: 'UPDATE_CONTACT', payload: data });
+    toast.success('Contact edited.');
+    console.log('new: ', data); console.log(contacts);
+  };
 
   return (
     <>
@@ -29,7 +46,7 @@ export const EditContact = () => {
             </div>
 
             <div className="col-md-6 shadow mx-auto p-5 mt-2">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-group mb-2">
                   <input type='text' placeholder="Name" className="form-control" value={name} onChange={evt => setName(evt.target.value)} ></input>
                 </div>
