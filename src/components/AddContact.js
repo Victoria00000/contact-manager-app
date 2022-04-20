@@ -15,7 +15,13 @@ export const AddContact = () => {
       return toast.warning("Please complete all the fields.");
     };
        //  ERROR   //
-  
+       {/* const checkContactExists = contacts.map(contact => {
+      return contact.email === email || contact.name === name || contact.number === parseInt(number) ?
+        contact : null
+    }); console.log(checkContactExists);
+    if (checkContactExists !== null) {
+      return toast.error("This contact already exists.");
+    }; */}
     
     // NewContact+Id //
     const data = {
