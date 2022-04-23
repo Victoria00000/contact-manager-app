@@ -9,21 +9,8 @@ export const AddContact = () => {
   const contacts = useSelector(state => state.contactReducer); console.log(contacts);
   const dispatch = useDispatch();
   // Validations //
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    if (!email || !name || !number) {
-      return toast.warning("Please complete all the fields.");
-    };
-       //  ERROR   //
-       {/* const checkContactExists = contacts.map(contact => {
-      return contact.email === email || contact.name === name || contact.number === parseInt(number) ?
-        contact : null
-    }); console.log(checkContactExists);
-    if (checkContactExists !== null) {
-      return toast.error("This contact already exists.");
-    }; */}
-    
-    // NewContact+Id //
+
+  const addNewContact = (na, em, nu) => {
     const data = {
       id: contacts[contacts.length - 1].id + 1, //making the id
       name,
@@ -34,6 +21,28 @@ export const AddContact = () => {
     dispatch({ type: 'ADD_CONTACT', payload: data });
     toast.success('Contact added.');
     console.log('new: ', data); console.log(contacts);
+    return true;
+  }
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    if (!email || !name || !number) {
+      return toast.warning("Please complete all the fields.");
+    };
+    console.log(contacts);
+
+    let flag = false;
+
+    const checkContactExists = contacts.map(contact => {
+      return contact.email === email || contact.name === name || contact.number === parseInt(number) ?
+      flag = false : flag = true
+    });
+    
+    flag ? addNewContact(name, email, number) : toast.error("This contact already exists.");
+
+    console.log(checkContactExists);
+    // NewContact+Id //
+
   };
 
   return (
